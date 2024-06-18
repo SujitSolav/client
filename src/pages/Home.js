@@ -1,25 +1,25 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React  from "react";
+// import axios from "axios";
 
 function Home() {
 
-  const getData = async () => {
-    try {
-      const res = await axios.post( "http://127.0.0.1:5000/api/user/get-user-ingo-by-id", {},   {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      ); 
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const res = await axios.post( "http://127.0.0.1:5000/api/user/get-user-ingo-by-id", {},   {
+  //         headers: {
+  //           Authorization: "Bearer " + localStorage.getItem("token"),
+  //         },
+  //       }
+  //     ); 
+  //     console.log(res.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <div>
