@@ -16,11 +16,13 @@ function Login() {
     
     try {
       const res = await axios.post('http://127.0.0.1:5000/api/user/login', loginData);
+      console.log('Response from server:', res.data); 
       if (res.data.success) {
         toast.success(res.data.message);
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('role', res.data.role);
-        localStorage.setItem('userId', res.data.UserId);  // Store the UserId in localStorage
+        localStorage.setItem('userId', res.data.UserId); 
+        localStorage.setItem('userName', res.data.userName); 
         toast("Redirecting to Dashboard");
         if (res.data.role === 'doctor') {
           navigate(`/doctor`);
@@ -31,10 +33,11 @@ function Login() {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error('Error during login:', error); // More detailed logging
       toast.error("Login failed");
     }
   };
+  
 
   return (
     <div className='authentication'>

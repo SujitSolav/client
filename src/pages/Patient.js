@@ -6,6 +6,33 @@ function PatientDashboard() {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [appointmentDate, setAppointmentDate] = useState('');
+  const [myAppointment, setMyAppointment] = useState([]);
+
+  const userId = localStorage.getItem('userId');
+  // const userName = localStorage.getItem('userName');
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+        const res = await axios.get(`http://127.0.0.1:5000/api/user/getAppointmentsById?userId=${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(res.data);
+        if (res.data.success) {
+          setMyAppointment(res.data.data);
+        } else {
+          toast.error('Failed to fetch appointments');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Server Error');
+      }
+    };
+
+    fetchAppointments();
+  }, []);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -25,15 +52,16 @@ function PatientDashboard() {
     fetchDoctors();
   }, []);
 
+
   const handleBookAppointment = async () => {
     try {
       const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
       const res = await axios.post(
-        `http://127.0.0.1:5000/api/user/book-appointment=${userId}`,
+        `http://127.0.0.1:5000/api/user/book-appointment`,
         {
           doctorId: selectedDoctor,
           appointmentDate,
+          userId
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -50,11 +78,10 @@ function PatientDashboard() {
       console.error(error);
       toast.error('Booking failed');
     }
-  };
-
-
+  }
 
   return (
+    <>
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1 style={{ textAlign: 'center', color: '#333' }}>Doctors List</h1>
       {doctors.length > 0 ? (
@@ -102,6 +129,40 @@ function PatientDashboard() {
         </div>
       )}
     </div>
+
+    <h1>My Appointments</h1>
+
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <h1 style={{ textAlign: 'center', color: '#333' }}>Appointments</h1>
+    {myAppointment.length > 0 ? (
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+        {myAppointment.map((appointment) => (
+          <li
+            key={appointment._id}
+            style={{
+              border: '1px solid #ccc',
+              margin: '10px 0',
+              padding: '10px',
+              borderRadius: '5px',
+            }}
+          >
+            <p style={{ margin: '5px 0' }}>
+              <strong>Date:</strong> {new Date(appointment.date).toLocaleString()}
+            </p>
+            <p style={{ margin: '5px 0' }}>
+              <strong>Doctor:</strong> {appointment.doctor.name || 'Unknown'}
+            </p>
+            <p style={{ margin: '5px 0' }}>
+              <strong>Status:</strong> {appointment.status ? 'Pending' : 'Accepted'}
+            </p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p style={{ textAlign: 'center', color: '#999' }}>No appointments available</p>
+    )}
+  </div>
+ </>
   );
 }
 

@@ -93,5 +93,5 @@ function Register() {
     </div>
   );
 }
-
+ 
 export default Register;
