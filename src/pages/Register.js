@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import localImage from './images/img5.jpg'
 
 function Register() {
   const navigate = useNavigate();
@@ -38,8 +39,8 @@ function Register() {
   };
 
   return (
-    <div className='authentication'>
-      <div className='authenticationForm card p-3'>
+    <div className='authentication' style={{display:'flex'}} >
+      <div className='authenticationForm card p-3' style={{'height':'520px'}}>
         <h1 className='card-title'>Register</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -89,6 +90,9 @@ function Register() {
           )}
           <button type="submit" className="btn btn-primary">Register</button>
         </form>
+      </div>
+      <div className="imageregister">
+        <img style={{height:'350px', marginLeft:'200px' , borderRadius:'5%'}} src={localImage} alt="" />
       </div>
     </div>
   );

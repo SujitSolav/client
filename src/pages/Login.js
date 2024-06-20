@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import localImage  from './images/img4.jpg'
 
 function Login() {
   const navigate = useNavigate();
@@ -40,7 +41,13 @@ function Login() {
   
 
   return (
-    <div className='authentication'>
+    <div className="mainlogin "  style={{display:'flex', width:'100%', backgroundImage: `url(${localImage})`,
+      backgroundPosition:' center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      height:'644px'}}> 
+       
+    <div className='authenticationLogin' style={{ margin:'8% 63%' }} >
       <div className='authenticationForm card p-3'>
         <h1 className='card-title'>Login</h1>
         <form onSubmit={handleSubmit}>
@@ -63,6 +70,8 @@ function Login() {
           <Link to='/register' className='anchor'>GO TO Register</Link>
         </form>
       </div>
+    </div>
+
     </div>
   );
 }

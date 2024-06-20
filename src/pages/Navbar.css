@@ -1,0 +1,60 @@
+.NavLink {
+    text-decoration: none;
+    color: #000; 
+}
+
+.NavLink:hover {
+    color: rgb(255, 0, 0); 
+    display: flex;
+}
+
+.Activee {
+    font-weight: bold;
+    color: rgb(157, 255, 0); 
+}
+navbarr ul{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.navbarr ul li{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 9px 20px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+
+.navbarr{
+    background-color: rgb(134, 209, 247);
+    height: 75px;
+    text-align: center;
+    display: flex; 
+     justify-content: space-between;
+     /* background-color: #e2fffeda; */
+}
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.button:hover {
+    background-color: #e1ecf9; 
+    color: rgb(0, 0, 0);
+    border: 2px solid black ;
+
+}
+ul li img{
+    height: 50px;
+    margin-top: 0px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+

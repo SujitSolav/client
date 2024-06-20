@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { Container, Card, Form, Nav, Navbar } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function DoctorDashboard() {
   const [appointments, setAppointments] = useState([]);
+  const doctorName = localStorage.getItem('doctorName') || 'Doctor';
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -57,50 +60,61 @@ function DoctorDashboard() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1 style={{ textAlign: 'center', color: '#333' }}>Appointments</h1>
-      {appointments.length > 0 ? (
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-          {appointments.map((appointment) => (
-            <li
-              key={appointment._id}
-              style={{
-                border: '1px solid #ccc',
-                margin: '10px 0',
-                padding: '10px',
-                borderRadius: '5px',
-              }}
-            >
-              <p style={{ margin: '5px 0' }}>
-                <strong>Date:</strong> {new Date(appointment.date).toLocaleString()}
-              </p>
-              <p style={{ margin: '5px 0' }}>
-                <strong>Patient:</strong> {appointment.patient.name}
-              </p>
-              <p style={{ margin: '5px 0' }}>
-                <strong>Patient_id:</strong> {appointment.patient._id}
-              </p>
-              <p style={{ margin: '5px 0' }}>
-                <strong>Status:</strong> 
-                <select 
-                  value={appointment.status} 
-                  onChange={(e) => handleChangeStatus(appointment._id, e.target.value)} 
-                  className="form-control" 
-                  id="status" 
-                  name="status" 
-                  required
-                >
-                  <option value="Pending">Pending</option> 
-                  <option value="Accepted">Accepted</option>
-                  <option value="Rejected">Rejected</option>
-                </select>
-              </p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p style={{ textAlign: 'center', color: '#999' }}>No appointments available</p>
-      )}
+    <div>
+      <div style={{ display: 'flex' }}>
+        <div style={{ 
+          height: 'auto', 
+          width: '290px', 
+          // position: 'fixed', 
+          top: '56px', // Adjust this if the height of the Navbar changes
+          left: '0', 
+          backgroundColor: '#343a40', 
+          paddingTop: '20px', 
+          color: 'white' 
+        }}>
+          <h2 style={{ textAlign: 'center' }}>{doctorName}</h2>
+          <Nav className="flex-column" style={{ paddingLeft: '10px' }}>
+            <Nav.Link href="#home" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Home</Nav.Link>
+            <Nav.Link href="#profile" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Profile</Nav.Link>
+            <Nav.Link href="#appointments" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Appointments</Nav.Link>
+            <Nav.Link href="#settings" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Settings</Nav.Link>
+          </Nav>
+        </div>
+        <div style={{ marginLeft: '50px', padding: '20px', width: '100%' }}>
+          <Container className="my-5">
+            <h1>Appointments</h1>
+            {appointments.length > 0 ? (
+              <div style={{ width: '400px' }}>
+                {appointments.map((appointment) => (
+                  <Card key={appointment._id} className="mb-3">
+                    <Card.Body>
+                      <Card.Title>
+                        <strong>Patient Name: </strong>{appointment.patient.name}
+                      </Card.Title>
+                      <Card.Text>
+                        <strong>Date:</strong> {new Date(appointment.date).toLocaleString()}
+                      </Card.Text>
+                      <Card.Text>
+                        <strong>Status:</strong>
+                      </Card.Text>
+                      <Form.Select 
+                        value={appointment.status} 
+                        onChange={(e) => handleChangeStatus(appointment._id, e.target.value)} 
+                      >
+                        <option value="Pending">Pending</option> 
+                        <option value="Accepted">Accepted</option>
+                        <option value="Rejected">Rejected</option>
+                      </Form.Select>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-muted">No appointments available</p>
+            )}
+          </Container>
+        </div>
+      </div>
     </div>
   );
 }
