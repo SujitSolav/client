@@ -65,8 +65,7 @@ function DoctorDashboard() {
         <div style={{ 
           height: 'auto', 
           width: '290px', 
-          // position: 'fixed', 
-          top: '56px', // Adjust this if the height of the Navbar changes
+          top: '56px',
           left: '0', 
           backgroundColor: '#343a40', 
           paddingTop: '20px', 
