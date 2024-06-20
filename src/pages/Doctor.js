@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { Container, Card, Form, Nav, Navbar } from 'react-bootstrap';
+import { Container, Card, Form, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import img8 from './images/img8.jpg';
 
 function DoctorDashboard() {
   const [appointments, setAppointments] = useState([]);
@@ -60,30 +61,35 @@ function DoctorDashboard() {
   };
 
   return (
-    <div>
-      <div style={{ display: 'flex' }}>
+    <div style={{ 
+      height: '100vh', 
+      backgroundImage: `url(${img8})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed',
+      overflow: 'auto'
+    }}>
+      <div style={{ display: 'flex', height: '100%' }}>
         <div style={{ 
-          height: 'auto', 
           width: '290px', 
-          top: '56px',
-          left: '0', 
           backgroundColor: '#343a40', 
           paddingTop: '20px', 
-          color: 'white' 
+          color: 'white', 
+          position: 'fixed', 
+          height: '100%'
         }}>
           <h2 style={{ textAlign: 'center' }}>{doctorName}</h2>
           <Nav className="flex-column" style={{ paddingLeft: '10px' }}>
-            <Nav.Link href="#home" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Home</Nav.Link>
-            <Nav.Link href="#profile" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Profile</Nav.Link>
-            <Nav.Link href="#appointments" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Appointments</Nav.Link>
-            <Nav.Link href="#settings" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Settings</Nav.Link>
+            <Nav.Link href="/Home" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Home</Nav.Link>
+            <Nav.Link href="/doctor" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Profile</Nav.Link>
+            <Nav.Link href="/doctor" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Appointments</Nav.Link>
           </Nav>
         </div>
-        <div style={{ marginLeft: '50px', padding: '20px', width: '100%' }}>
+        <div style={{ marginLeft: '290px', padding: '20px', width: '100%' }}>
           <Container className="my-5">
             <h1>Appointments</h1>
             {appointments.length > 0 ? (
-              <div style={{ width: '400px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width:'40%' }}>
                 {appointments.map((appointment) => (
                   <Card key={appointment._id} className="mb-3">
                     <Card.Body>
