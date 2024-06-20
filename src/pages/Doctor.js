@@ -28,7 +28,33 @@ function DoctorDashboard() {
     fetchAppointments();
   }, []);
 
-  
+  const handleChangeStatus = async (appointmentId, newStatus) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post(
+        'http://127.0.0.1:5000/api/user/changeStatus',
+        {
+          appointmentId,
+          status: newStatus
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        // Update the appointment status in the local state
+        setAppointments(appointments.map(app =>
+          app._id === appointmentId ? { ...app, status: newStatus } : app
+        ));
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to change status');
+    }
+  };
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -49,10 +75,25 @@ function DoctorDashboard() {
                 <strong>Date:</strong> {new Date(appointment.date).toLocaleString()}
               </p>
               <p style={{ margin: '5px 0' }}>
-                <strong>Patient:</strong> {appointment.patient.name || 'Unknown'}
+                <strong>Patient:</strong> {appointment.patient.name}
               </p>
               <p style={{ margin: '5px 0' }}>
-                <strong>Status:</strong> {appointment.status ? 'Pending' : 'Accepted'}
+                <strong>Patient_id:</strong> {appointment.patient._id}
+              </p>
+              <p style={{ margin: '5px 0' }}>
+                <strong>Status:</strong> 
+                <select 
+                  value={appointment.status} 
+                  onChange={(e) => handleChangeStatus(appointment._id, e.target.value)} 
+                  className="form-control" 
+                  id="status" 
+                  name="status" 
+                  required
+                >
+                  <option value="Pending">Pending</option> 
+                  <option value="Accepted">Accepted</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
               </p>
             </li>
           ))}
@@ -65,40 +106,3 @@ function DoctorDashboard() {
 }
 
 export default DoctorDashboard;
-
-
-  // const handleAccept = async (appointmentId) => {
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     const res = await axios.put(`http://127.0.0.1:5000/api/user/appointment/${appointmentId}/accept`, {}, {
-  //       headers: { Authorization: `Bearer ${token}` }
-  //     });
-  //     if (res.data.success) {
-  //       toast.success('Appointment accepted');
-  //       setAppointments(appointments.map(app => app._id === appointmentId ? { ...app, status: 'accepted' } : app));
-  //     } else {
-  //       toast.error('Failed to accept appointment');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error('Server Error');
-  //   }
-  // };
-
-  // const handleReject = async (appointmentId) => {
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     const res = await axios.put(`http://127.0.0.1:5000/api/user/appointment/${appointmentId}/reject`, {}, {
-  //       headers: { Authorization: `Bearer ${token}` }
-  //     });
-  //     if (res.data.success) {
-  //       toast.success('Appointment rejected');
-  //       setAppointments(appointments.map(app => app._id === appointmentId ? { ...app, status: 'rejected' } : app));
-  //     } else {
-  //       toast.error('Failed to reject appointment');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error('Server Error');
-  //   }
-  // };

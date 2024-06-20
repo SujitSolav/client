@@ -6,22 +6,21 @@ function PatientDashboard() {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [appointmentDate, setAppointmentDate] = useState('');
-  const [myAppointment, setMyAppointment] = useState([]);
+  const [myAppointments, setMyAppointments] = useState([]);
+  const [status, setStatus] = useState('Pending');
 
   const userId = localStorage.getItem('userId');
-  // const userName = localStorage.getItem('userName');
 
+  // Fetch appointments when the component mounts
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('userId');
         const res = await axios.get(`http://127.0.0.1:5000/api/user/getAppointmentsById?userId=${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(res.data);
         if (res.data.success) {
-          setMyAppointment(res.data.data);
+          setMyAppointments(res.data.data);
         } else {
           toast.error('Failed to fetch appointments');
         }
@@ -32,7 +31,10 @@ function PatientDashboard() {
     };
 
     fetchAppointments();
-  }, []);
+  }, );
+
+  // Fetch doctors when the component mounts
+
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -52,16 +54,17 @@ function PatientDashboard() {
     fetchDoctors();
   }, []);
 
-
+  // Handle booking an appointment
   const handleBookAppointment = async () => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        `http://127.0.0.1:5000/api/user/book-appointment`,
+        'http://127.0.0.1:5000/api/user/book-appointment',
         {
           doctorId: selectedDoctor,
           appointmentDate,
-          userId
+          userId,
+          status,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -71,6 +74,7 @@ function PatientDashboard() {
         toast.success(res.data.message);
         setSelectedDoctor(null);
         setAppointmentDate('');
+        setStatus('Pending');
       } else {
         toast.error(res.data.message);
       }
@@ -78,10 +82,9 @@ function PatientDashboard() {
       console.error(error);
       toast.error('Booking failed');
     }
-  }
+  };
 
   return (
-    <>
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1 style={{ textAlign: 'center', color: '#333' }}>Doctors List</h1>
       {doctors.length > 0 ? (
@@ -91,7 +94,7 @@ function PatientDashboard() {
               <h2 style={{ margin: '5px 0' }}>{doctor.name}</h2>
               <p style={{ margin: '5px 0' }}><strong>Specialty:</strong> {doctor.specialty}</p>
               <p style={{ margin: '5px 0' }}><strong>Email:</strong> {doctor.email}</p>
-              <button 
+              <button
                 style={{ padding: '5px 10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}
                 onClick={() => setSelectedDoctor(doctor._id)}
               >
@@ -114,13 +117,13 @@ function PatientDashboard() {
             style={{ padding: '5px', borderRadius: '3px', border: '1px solid #ccc', marginBottom: '10px' }}
           />
           <br />
-          <button 
+          <button
             onClick={handleBookAppointment}
             style={{ padding: '5px 10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer', marginRight: '10px' }}
           >
             Confirm
           </button>
-          <button 
+          <button
             onClick={() => setSelectedDoctor(null)}
             style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}
           >
@@ -128,41 +131,39 @@ function PatientDashboard() {
           </button>
         </div>
       )}
+
+
+
+
+      <h1 style={{ textAlign: 'center', color: '#333' }}>My Appointments</h1>
+      {myAppointments.length > 0 ? (
+        <ul style={{ listStyleType: 'none', padding: 0 }}>
+          {myAppointments.map((appointment) => (
+            <li
+              key={appointment._id}
+              style={{
+                border: '1px solid #ccc',
+                margin: '10px 0',
+                padding: '10px',
+                borderRadius: '5px',
+              }}
+            >
+              <p style={{ margin: '5px 0' }}>
+                <strong>Date:</strong> {new Date(appointment.date).toLocaleString()}
+              </p>
+              <p style={{ margin: '5px 0' }}>
+                <strong>Doctor:</strong> {appointment.doctor.name || 'Unknown'}
+              </p>
+              <p style={{ margin: '5px 0' }}>
+                <strong>Status:</strong> {appointment.status}
+              </p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p style={{ textAlign: 'center', color: '#999' }}>No appointments available</p>
+      )}
     </div>
-
-    <h1>My Appointments</h1>
-
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-    <h1 style={{ textAlign: 'center', color: '#333' }}>Appointments</h1>
-    {myAppointment.length > 0 ? (
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-        {myAppointment.map((appointment) => (
-          <li
-            key={appointment._id}
-            style={{
-              border: '1px solid #ccc',
-              margin: '10px 0',
-              padding: '10px',
-              borderRadius: '5px',
-            }}
-          >
-            <p style={{ margin: '5px 0' }}>
-              <strong>Date:</strong> {new Date(appointment.date).toLocaleString()}
-            </p>
-            <p style={{ margin: '5px 0' }}>
-              <strong>Doctor:</strong> {appointment.doctor.name || 'Unknown'}
-            </p>
-            <p style={{ margin: '5px 0' }}>
-              <strong>Status:</strong> {appointment.status ? 'Pending' : 'Accepted'}
-            </p>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p style={{ textAlign: 'center', color: '#999' }}>No appointments available</p>
-    )}
-  </div>
- </>
   );
 }
 
