@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import "./Navbar.css";
 import icon1 from './images/icon1.png';
+import { useNavigate} from 'react-router-dom';
 
 function Navbar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Check if the user is authenticated
-    const token = localStorage.getItem('authToken'); // or use a more secure method
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
+const Navigate= useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem('authToken'); // or use a more secure method
-    setIsAuthenticated(false);
+      localStorage.clear(); // or use a more secure method
+      Navigate('/login')
+   
   };
+  const userID =localStorage.getItem('userId');
+ 
 
   return (
     <div className='navbarr'>
@@ -32,7 +26,7 @@ function Navbar() {
         </li>
       </ul>
       <ul style={{ listStyleType: 'none', marginTop: '3px' }}>
-        {isAuthenticated ? (
+        {userID ? (
           <li>
             <button className='button' onClick={handleLogout}>Logout</button>
           </li>

@@ -85,12 +85,15 @@ function PatientDashboard() {
       toast.error('Booking failed');
     }
   };
-
+const name= localStorage.getItem('userName')
   return (
     <div style={{ display: 'flex', fontFamily: 'Arial, sans-serif' }}>
       {/* Vertical Navbar */}
       <div style={{ width: '260px', background: '#e2fffeda', padding: '20px', borderRight: '2px solid #ccc' }}>
-        <h2 style={{ textAlign: 'center', color: '#333' }}>Menu</h2>
+      <h4 style={{ textAlign: 'center', color: '#333' }}> <strong>Profile </strong>  </h4>
+      <h5 style={{textAlign:'center'}}>Name : {name} </h5> 
+      <hr></hr>
+         <h4 style={{ textAlign: 'center', color: '#333', marginTop:'40px' }}>Menu</h4>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
           <li style={{ marginBottom: '10px' }}>
             <button

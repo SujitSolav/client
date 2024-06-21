@@ -59,6 +59,7 @@ function DoctorDashboard() {
       toast.error('Failed to change status');
     }
   };
+const name= localStorage.getItem('userName')
 
   return (
     <div style={{ 
@@ -78,7 +79,10 @@ function DoctorDashboard() {
           position: 'fixed', 
           height: '100%'
         }}>
-          <h2 style={{ textAlign: 'center' }}>{doctorName}</h2>
+          {/* <h2 style={{ textAlign: 'center' }}>{doctorName}</h2> */}
+          <h4 style={{ textAlign: 'center', color: '#333' }}> <strong style={{color: 'white'}} > Profile </strong>  </h4>
+          <h5 style={{textAlign:'center'}}>Name : {name} </h5> 
+          <hr></hr>
           <Nav className="flex-column" style={{ paddingLeft: '10px' }}>
             <Nav.Link href="/Home" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Home</Nav.Link>
             <Nav.Link href="/doctor" style={{ color: 'white', padding: '15px', textDecoration: 'none' }}>Profile</Nav.Link>
@@ -87,7 +91,7 @@ function DoctorDashboard() {
         </div>
         <div style={{ marginLeft: '290px', padding: '20px', width: '100%' }}>
           <Container className="my-5">
-            <h1>Appointments</h1>
+            <h1 style={{position:'relative', top:'-40px' }}>Appointments</h1>
             {appointments.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width:'40%' }}>
                 {appointments.map((appointment) => (
